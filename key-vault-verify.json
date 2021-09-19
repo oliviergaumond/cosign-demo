@@ -1,0 +1,27 @@
+{
+"Name": "Key Reader + Verify",
+"IsCustom": true,
+"Description": "Adds verify authorization to Key Vault Reader role",
+"AssignableScopes": [
+    "/subscriptions/[insert subscription id]"
+],
+"Actions": [
+    "Microsoft.Authorization/*/read",
+    "Microsoft.Insights/alertRules/*",
+    "Microsoft.Resources/deployments/*",
+    "Microsoft.Resources/subscriptions/resourceGroups/read",
+    "Microsoft.Support/*",
+    "Microsoft.KeyVault/checkNameAvailability/read",
+    "Microsoft.KeyVault/deletedVaults/read",
+    "Microsoft.KeyVault/locations/*/read",
+    "Microsoft.KeyVault/vaults/*/read",
+    "Microsoft.KeyVault/operations/read"
+],
+"NotActions": [],
+"DataActions": [
+    "Microsoft.KeyVault/vaults/*/read",
+    "Microsoft.KeyVault/vaults/secrets/readMetadata/action",
+    "Microsoft.KeyVault/vaults/keys/verify/action"
+],
+"NotDataActions": []            
+}

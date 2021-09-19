@@ -32,7 +32,7 @@ jobs:
         
       - name: Docker push
         shell: bash
-        run: docker push -t ${{ secrets.REGISTRY_HOST }}/hello-world 
+        run: docker push ${{ secrets.REGISTRY_HOST }}/hello-world 
 
 
       

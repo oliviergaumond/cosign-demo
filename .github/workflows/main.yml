@@ -1,0 +1,38 @@
+
+name: Build, sign and push
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:      
+      - uses: actions/checkout@v2
+      
+      - name: Docker Login
+        uses: docker/login-action@v1.10.0
+        with:          
+          registry: ${{ secrets.REGISTRY_HOST }}
+          username: ${{ secrets.CLIENTID }}          
+          password: ${{ secrets.CLIENTSECRET }}
+
+      - name: Docker build
+        shell: bash
+        run: docker build -t ${{ secrets.REGISTRY_HOST }}/hello-world .          
+        
+      - name: Docker push
+        shell: bash
+        run: docker push -t ${{ secrets.REGISTRY_HOST }}/hello-world 
+
+
+      

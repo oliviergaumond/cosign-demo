@@ -30,11 +30,11 @@ jobs:
 
       - name: Docker build
         shell: bash
-        run: docker build -t ${{ secrets.REGISTRY_HOST }}/hello-world .          
+        run: docker build -t ${{ secrets.REGISTRY_HOST }}/hello-world:latest .          
         
       - name: Docker push
         shell: bash
-        run: docker push ${{ secrets.REGISTRY_HOST }}/hello-world 
+        run: docker push ${{ secrets.REGISTRY_HOST }}/hello-world:latest 
 
       - name: Sign image
         shell: bash
@@ -42,7 +42,7 @@ jobs:
           AZURE_TENANT_ID: ${{ secrets.TENANTID }}
           AZURE_CLIENT_ID: ${{ secrets.CLIENTID }}   
           AZURE_CLIENT_SECRET: ${{ secrets.CLIENTSECRET }}
-        run: cosign sign -key ${{ secrets.KVPATH }} ${{ secrets.REGISTRY_HOST }}/hello-world
+        run: cosign sign -key ${{ secrets.KVPATH }} ${{ secrets.REGISTRY_HOST }}/hello-world:latest
 
 
       

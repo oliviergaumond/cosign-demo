@@ -39,6 +39,7 @@ jobs:
       - name: Sign image
         shell: bash
         env:
+          AZURE_TENANT_ID: ${{ secrets.TENANTID }}
           AZURE_CLIENT_ID: ${{ secrets.CLIENTID }}   
           AZURE_CLIENT_SECRET: ${{ secrets.CLIENTSECRET }}
         run: cosign sign -key ${{ secrets.KVPATH }} ${{ secrets.REGISTRY_HOST }}/hello-world

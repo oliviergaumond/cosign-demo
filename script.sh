@@ -5,7 +5,7 @@ export ACRNAME='cosigndemoacr'
 #create resource group
 az group create -n $RG --location eastus
 #create container registry
-az acr create -n $ACRNAME -g $RG --sku Basic --admin-enabled=true
+az acr create -n $ACRNAME -g $RG --sku Basic
 export ACRHOST=$(az acr show -g $RG -n $ACRNAME --query "loginServer" -o tsv)
 #create keyvault
 az keyvault create -n $KVNAME -g $RG --location eastus --enable-rbac-authorization true
@@ -56,6 +56,10 @@ cosign sign -key "azurekms://$KVNAME.vault.azure.net/cosignkey" $ACRHOST/nginx:v
 export AZURE_CLIENT_ID=$KVREADER_CLIENTID
 export AZURE_CLIENT_SECRET=$KVREADER_SECRET
 cosign verify -key "azurekms://$KVNAME.vault.azure.net/cosignkey" $ACRHOST/nginx:v1
+
+
+#Give the AcrPush permissions to the sp-cosign-signer service principal.
+az role assignment create --role "AcrPush" --scope $ACRID --assignee-object-id $KVSIGNER_OBJID --assignee-principal-type ServicePrincipal
 
 
 ##Clean up

@@ -18,6 +18,8 @@ jobs:
     
     steps:      
       - uses: actions/checkout@v2
+
+      - uses: sigstore/cosign-installer@main
       
       - name: Docker Login
         uses: docker/login-action@v1.10.0
@@ -33,6 +35,13 @@ jobs:
       - name: Docker push
         shell: bash
         run: docker push ${{ secrets.REGISTRY_HOST }}/hello-world 
+
+      - name: Sign image
+        shell: bash
+        env:
+          AZURE_CLIENT_ID: ${{ secrets.CLIENTID }}   
+          AZURE_CLIENT_SECRET: ${{ secrets.CLIENTSECRET }}
+        run: cosign sign -key ${{ secrets.KVPATH }} ${{ secrets.REGISTRY_HOST }}/hello-world
 
 
       

@@ -3,7 +3,7 @@
 "IsCustom": true,
 "Description": "Adds verify authorization to Key Vault Reader role",
 "AssignableScopes": [
-    "/subscriptions/[insert subscription id]"
+    "/subscriptions/<subid>"
 ],
 "Actions": [
     "Microsoft.Authorization/*/read",

@@ -1,3 +1,5 @@
+#set the name of the resources. 
+#the keyvault and ACR names need to be globally unique, you may want to change them and make sure they are unique
 export RG='cosign-rg'
 export KVNAME='cosigndemokv'
 export ACRNAME='cosigndemoacr'
@@ -12,7 +14,8 @@ az keyvault create -n $KVNAME -g $RG --location eastus --enable-rbac-authorizati
 #get the resource id for role assignment later
 export KVID=$(az keyvault show  -n $KVNAME -g $RG --query "id" -o tsv)
 export ACRID=$(az acr show -g $RG -n $ACRNAME --query "id" -o tsv)
-#set tenant id
+#set subscription and tenant id
+export SUBSCRIPTIONID=$(az account show --query id -o tsv)
 export AZURE_TENANT_ID=$(az account show --query tenantId -o tsv)
 
 export KVADMIN_SECRET=$(az ad sp create-for-rbac -n sp-cosign-keyadmin --role "Key Vault Crypto Officer" --scopes $KVID --query password -o tsv)
@@ -25,7 +28,6 @@ export KVREADER_CLIENTID=$(az ad sp list --display-name sp-cosign-reader --query
 export KVREADER_OBJID=$(az ad sp list --display-name sp-cosign-reader --query [].objectId -o tsv)
 
 
-az role definition create --role-definition key-vault-verify.json
 
 #set the admin credentials
 export AZURE_CLIENT_ID=$KVADMIN_CLIENTID
@@ -39,6 +41,11 @@ az role assignment create --role "Key Vault Crypto Officer" --scope $KVID --assi
 az keyvault key show --name cosignkey --vault-name $KVNAME
 
 az role assignment create --role "Key Vault Crypto User" --scope "$KVID/keys/cosignkey" --assignee-object-id $KVSIGNER_OBJID --assignee-principal-type ServicePrincipal
+
+#set the subscription id the custom role definition
+sed -i "s/<subid>/$SUBSCRIPTIONID/" key-vault-verify.json 
+#create the custom role
+az role definition create --role-definition key-vault-verify.json
 az role assignment create --role "Key Reader + Verify" --scope "$KVID/keys/cosignkey" --assignee-object-id $KVREADER_OBJID --assignee-principal-type ServicePrincipal
 
 

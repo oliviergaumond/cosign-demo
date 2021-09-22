@@ -1,3 +1,6 @@
+#all the commands used in the blog article. 
+#This script is not intented to be run as a whole, rather line by line as you follow the steps and explanations in the article
+
 #set the name of the resources. 
 #the keyvault and ACR names need to be globally unique, you may want to change them and make sure they are unique
 export RG='cosign-rg'

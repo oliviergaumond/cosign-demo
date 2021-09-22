@@ -42,7 +42,7 @@ jobs:
           AZURE_TENANT_ID: ${{ secrets.TENANTID }}
           AZURE_CLIENT_ID: ${{ secrets.CLIENTID }}   
           AZURE_CLIENT_SECRET: ${{ secrets.CLIENTSECRET }}
-        run: cosign sign -key ${{ secrets.KVPATH }} ${{ secrets.REGISTRY_HOST }}/hello-world:latest
+        run: cosign sign -a commit=${{ github.sha }} -key ${{ secrets.KVPATH }} ${{ secrets.REGISTRY_HOST }}/hello-world:latest 
 
 
       
